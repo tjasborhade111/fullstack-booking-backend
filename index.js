@@ -9,8 +9,10 @@ const app = express();
 app.use(cors({
   origin: ['http://localhost:5173', 'https://your-frontend.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 
 // ✅ Parse JSON
 app.use(express.json());
