@@ -12,10 +12,14 @@ connection();
 app.use(express.json());
 
 app.use(cors({
-  origin: '*',
+  origin: [
+    'http://localhost:5173',                  // For local development
+    'https://your-frontend.vercel.app'        // Replace with your actual Vercel frontend URL
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
+
 
 // Routes
 const userRoutes = require('./routes/users');
