@@ -5,23 +5,20 @@ const connection = require('./db');
 
 const app = express();
 
-// Connect to MongoDB
-connection();
-
-// Middleware
-app.use(express.json());
-
+// ✅ Fix: CORS middleware before everything else
 app.use(cors({
-  origin: [
-    'http://localhost:5173',                  // For local development
-    'https://your-frontend.vercel.app'        // Replace with your actual Vercel frontend URL
-  ],
+  origin: ['http://localhost:5173', 'https://your-frontend.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 
+// ✅ Parse JSON
+app.use(express.json());
 
-// Routes
+// ✅ Connect to MongoDB Atlas
+connection();
+
+// ✅ Routes
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
 const bookingRoutes = require('./routes/bookingRoutes');
@@ -30,12 +27,12 @@ app.use('/api/users', userRoutes);       // Signup
 app.use('/api/auth', authRoutes);        // Login
 app.use('/api/bookings', bookingRoutes); // Booking logic
 
-// Root test route
+// ✅ Root test
 app.get('/', (req, res) => {
   res.send('✅ Booking System API is running.');
 });
 
-// Global error handler
+// ✅ Error handler
 app.use((err, req, res, next) => {
   console.error('❌ Server error:', err);
   res.status(500).json({ message: 'Internal Server Error' });
