@@ -6,12 +6,23 @@ const connection = require('./db');
 const app = express();
 
 // ✅ Fix: CORS middleware before everything else
+const allowedOrigins = [
+  'https://tjasborhade111-fullstack-booking-sy.vercel.app' // ✅ your actual Vercel frontend URL
+];
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://your-frontend.vercel.app'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
+  credentials: true
 }));
+
+
 
 
 // ✅ Parse JSON
