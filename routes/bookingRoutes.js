@@ -20,12 +20,16 @@ router.post('/', async (req, res) => {
       stylist,
     } = req.body;
 
+    // Debug incoming data
+    console.log('📦 Incoming booking data:', req.body);
+
     // ✅ Validate required fields
-    if (!userId || !userName || !name || !date || !time || !category || !provider) {
+    const requiredFields = [userId, userName, name, date, time, category, provider];
+    const missing = requiredFields.some(field => !field || field === '');
+    if (missing) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    // ✅ Create new booking document
     const newBooking = new Booking({
       userId,
       userName,
@@ -45,7 +49,6 @@ router.post('/', async (req, res) => {
     res.status(201).json({ message: 'Booking saved successfully', booking: newBooking });
 
   } catch (err) {
-    // Handle duplicate booking error (unique index)
     if (err.code === 11000) {
       return res.status(400).json({ message: 'Slot already booked for this provider at the selected time' });
     }
@@ -54,6 +57,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 // ✅ GET - Fetch bookings by user ID
 router.get('/:userId', async (req, res) => {
