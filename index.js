@@ -10,15 +10,15 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       'http://localhost:5173',
-      'https://tjasborhade111-fullstack-booking-sy.vercel.app'
+      'https://tjasborhade111-fullstack-booking-sy.vercel.app', // optional
+      'https://booking-sy.vercel.app' // ✅ the actual deployed frontend
     ];
 
-    // Allow requests with no origin (like mobile apps or curl)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.error(`❌ CORS error: ${origin} not allowed`);
-      callback(null, false); // safer than throwing an error
+      callback(null, false);
     }
   },
   credentials: true,
@@ -26,6 +26,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
 
 
 // ✅ Parse JSON
